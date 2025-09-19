@@ -51,7 +51,7 @@ function App() {
       
       //change it to the render url for the backend/model deployement
       const res = await axios.post(
-        "http://localhost:5000/api/predict/",
+        "https://house-price-predictor-fouz.onrender.com",
         requestData
       );
       console.log(res.data.results[0].predicted_price);

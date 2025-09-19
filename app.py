@@ -3,10 +3,8 @@ House Price Predictor - Flask API Server
 Enhanced Indian Housing Model with Location-based Pricing
 """
 import pickle
-
 import pandas as pd
 from flask_cors import CORS
-
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -19,20 +17,20 @@ def index():
     sizes = data["sizes"]
     bedrooms = data["bedrooms"]
     cities = data.get("cities", ["Delhi"] * len(sizes))  # Default to Delhi if not provided
-    
+
     # Load model and city encoder
     with open("model.pkl", "rb") as f:
         model = pickle.load(f)
-    
+
     try:
         with open("city_encoder.pkl", "rb") as f:
             city_encoder = pickle.load(f)
-        
+
         # Encode cities
         city_encoded = city_encoder.transform(cities)
-        
+
         new_data = pd.DataFrame({
-            "sizes": sizes, 
+            "sizes": sizes,
             "bedrooms": bedrooms,
             "city_encoded": city_encoded
         })
@@ -51,25 +49,18 @@ def index():
             formatted_price = f"₹{price/100000:.2f} L"
         else:
             formatted_price = f"₹{price:,.0f}"
-            
+
         result = {
             "size": size,
             "bedroom": bedroom,
             "predicted_price": formatted_price,
             "predicted_price_raw": int(price)  # Raw value for calculations
         }
-        
+
         # Add city if available
         if i < len(cities):
             result["city"] = cities[i]
-            
+
         results.append(result)
 
     return jsonify({"message": "Prediction results", "results": results})
-
-
-if __name__ == "__main__":
-    host = "localhost" # Add this or your app will not run
-    port = 5000 # Add this port or your app will not run
-    print(f"Running on http://{host}:{port}/")
-    app.run(debug=True, host=host, port=port)
