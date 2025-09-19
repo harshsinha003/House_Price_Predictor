@@ -12,7 +12,7 @@ A machine learning-based web application that predicts house prices for the Indi
 - **Indian Currency Format**: Results in Lakhs/Crores
 
 ## 🌐 Live Demo
-[Click Here](house-price-predictor-snowy.vercel.app)
+[Click Here](https://house-price-predictor-snowy.vercel.app/)
 
 ## 🛠️ Tech Stack
 
@@ -194,3 +194,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 
 ⭐ **If you found this project helpful, please give it a star!** ⭐
+
