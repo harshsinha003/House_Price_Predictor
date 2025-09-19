@@ -11,10 +11,10 @@ app = Flask(__name__)
 
 # Allow only your frontend domain
 CORS(app, resources={
-    r"/api/*": {
+    r"/*": {
         "origins": [
-            "http://localhost:5173",  # Vite/React local dev
-            "https://house-price-predictor-snowy.vercel.app"
+            "http://localhost:5173",  # local dev
+            "https://house-price-predictor-snowy.vercel.app"  # deployed frontend
         ]
     }
 })
