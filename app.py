@@ -9,7 +9,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Allow only your frontend domain
+# Allow only your frontend domain (and local dev)
 CORS(app, resources={
     r"/*": {
         "origins": [
@@ -20,18 +20,23 @@ CORS(app, resources={
 })
 
 
-@app.route("/api/predict/", methods=["POST"])
+@app.route("/api/predict/", methods=["POST", "OPTIONS"])
 def index():
+    # Handle preflight request (CORS)
+    if request.method == "OPTIONS":
+        return "", 200
+
     data = request.json
     sizes = data["sizes"]
     bedrooms = data["bedrooms"]
     cities = data.get("cities", ["Delhi"] * len(sizes))  # Default to Delhi if not provided
 
-    # Load model and city encoder
+    # Load model
     with open("model.pkl", "rb") as f:
         model = pickle.load(f)
 
     try:
+        # Try loading city encoder
         with open("city_encoder.pkl", "rb") as f:
             city_encoder = pickle.load(f)
 
@@ -44,14 +49,15 @@ def index():
             "city_encoded": city_encoded
         })
     except FileNotFoundError:
-        # Fallback to old model without city encoding
+        # Fallback: model without city encoding
         new_data = pd.DataFrame({"sizes": sizes, "bedrooms": bedrooms})
 
+    # Predict prices
     prices = model.predict(new_data).tolist()
     results = []
 
     for i, (size, bedroom, price) in enumerate(zip(sizes, bedrooms, prices)):
-        # Format price in Indian Rupees with proper formatting
+        # Format price in Indian Rupees
         if price >= 10000000:  # 1 Crore or more
             formatted_price = f"₹{price/10000000:.2f} Cr"
         elif price >= 100000:  # 1 Lakh or more
@@ -63,7 +69,7 @@ def index():
             "size": size,
             "bedroom": bedroom,
             "predicted_price": formatted_price,
-            "predicted_price_raw": int(price)  # Raw value for calculations
+            "predicted_price_raw": int(price)  # Raw numeric value
         }
 
         # Add city if available
