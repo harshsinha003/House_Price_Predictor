@@ -14,7 +14,7 @@ CORS(app, resources={
     r"/api/*": {
         "origins": [
             "http://localhost:5173",  # Vite/React local dev
-            "https://house-price-predictor-snowy.vercel.app/"
+            "https://house-price-predictor-snowy.vercel.app"
         ]
     }
 })
