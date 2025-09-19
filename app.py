@@ -8,7 +8,16 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-CORS(app)
+
+# Allow only your frontend domain
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://localhost:5173",  # Vite/React local dev
+            "https://house-price-predictor-snowy.vercel.app/"
+        ]
+    }
+})
 
 
 @app.route("/api/predict/", methods=["POST"])
