@@ -1,9 +1,10 @@
+// This file acts a cron job which give the requests to the render where backend is stored and hence make the site active
 const express = require("express");
 const axios = require("axios");
 const app = express();
 
 const url = `https://house-price-predictor-fouz.onrender.com`;
-const interval = 30000;
+const interval = 30000;    // 30 milliseconds is 30 seconds
 
 function reloadWebsite() {
   axios
