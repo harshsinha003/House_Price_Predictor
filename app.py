@@ -19,6 +19,12 @@ CORS(app, resources={
     }
 })
 
+# Added for the Backend Root
+# Root route for keep-alive and health check
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"status": "Backend is alive 🚀"})
+#--------------------------------------
 
 @app.route("/api/predict/", methods=["POST", "OPTIONS"])
 def index():
